@@ -14,16 +14,18 @@ import java.util.HashMap;
 @Service
 public class BoardService {
 
-    final BoardMapper boardMapper;
+    private final BoardMapper boardMapper;
 
     public BoardService(BoardMapper boardMapper) {
         this.boardMapper = boardMapper;
     }
 
+    @Transactional(readOnly = true)
     public ArrayList<Board> selectList(BoardReqVo reqVo) {
         return boardMapper.selectBoardList();
     }
 
+    @Transactional(readOnly = true)
     public Board selectOne(BoardReqVo reqVo) {
         return boardMapper.selectBoardOne(reqVo);
     }

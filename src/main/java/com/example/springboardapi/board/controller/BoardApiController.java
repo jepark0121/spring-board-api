@@ -12,16 +12,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @RestController
+@RequestMapping(path = "/board/")
 public class BoardApiController {
 
-    final BoardService boardService;
+    private final BoardService boardService;
 
     public BoardApiController(BoardService boardService) {
         this.boardService = boardService;
     }
 
     // 게시글 목록 조회
-    @GetMapping(path = "/board/list")
+    @GetMapping(path = "list")
     public ResponseEntity<BoardResVo> list(BoardReqVo reqVo) {
         BoardResVo resVo = new BoardResVo();
         resVo.setData(boardService.selectList(reqVo));
@@ -29,13 +30,13 @@ public class BoardApiController {
     }
 
     // 게시글 하나 조회
-    @GetMapping(path = "/board/one")
+    @GetMapping(path = "one")
     public ResponseEntity<Board> one(BoardReqVo reqVo) {
         return ResponseEntity.ok(boardService.selectOne(reqVo));
     }
 
     // 게시글 저장
-    @PostMapping(path = "/board/add")
+    @PostMapping(path = "add")
     public ResponseEntity<String> save(BoardReqVo reqVo) {
         ResponseEntity<String> response = null;
         try {
@@ -48,7 +49,7 @@ public class BoardApiController {
     }
 
     // 게시글 업데이트
-    @PutMapping(path = "/board/update")
+    @PutMapping(path = "update")
     public ResponseEntity<String> update(BoardReqVo reqVo) {
         ResponseEntity<String> response = null;
         try {
@@ -61,7 +62,7 @@ public class BoardApiController {
     }
 
     // 게시글 삭제
-    @DeleteMapping(path = "/board/delete")
+    @DeleteMapping(path = "delete")
     public ResponseEntity<String> delete(BoardReqVo reqVo) {
         ResponseEntity<String> response = null;
         try {

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.springboardapi.board.mapper.BoardMapper">
 
-    <select id="selectBoardList" resultType="com.example.springboardapi.board.model.Board">
+    <select id="selectBoardList" resultType="Board">
         SELECT TB.BOARD_ID              AS boardId
                , TB.TITLE               AS title
                , TB.CONTENTS            AS contents
@@ -17,7 +17,7 @@
         ORDER BY TB.BOARD_ID DESC
     </select>
 
-    <select id="selectBoardOne" resultType="com.example.springboardapi.board.model.Board">
+    <select id="selectBoardOne" resultType="Board">
         SELECT TB.BOARD_ID              AS boardId
                , TB.TITLE               AS title
                , TB.CONTENTS            AS contents
