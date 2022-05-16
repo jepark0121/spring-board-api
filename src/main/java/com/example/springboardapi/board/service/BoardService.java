@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class BoardService {
@@ -31,24 +32,44 @@ public class BoardService {
     }
 
     @Transactional
-    public void save(BoardReqVo reqVo) {
+    public int save(BoardReqVo reqVo) {
+        int count = 0;
         // 게시글 저장
-        boardMapper.insertBoard(reqVo);
+        count = boardMapper.insertBoard(reqVo);
         // 게시글 태그 저장
         boardMapper.insertBoardTags(reqVo);
+        return count;
     }
 
     @Transactional
-    public void update(BoardReqVo reqVo) {
+    public int update(BoardReqVo reqVo) {
+        int count = 0;
         // 게시글 수정
-        boardMapper.updateBoard(reqVo);
-        // 태그 수정 추가 필요
+        count = boardMapper.updateBoard(reqVo);
+        // 태그 수정
+        List<String> tagList = reqVo.getTagList();
+        if(tagList.size() > 0) {
+            boardMapper.deleteTagList(reqVo);
+            boardMapper.insertBoardTags(reqVo);
+        }
+        return count;
     }
 
     @Transactional
-    public void delete(BoardReqVo reqVo) {
+    public int delete(BoardReqVo reqVo) {
         // 게시글 삭제
-        boardMapper.deleteBoard(reqVo);
+        return boardMapper.deleteBoard(reqVo);
+    }
+
+    @Transactional
+    public int realDelete(BoardReqVo reqVo) {
+        List<Integer> tagList = boardMapper.selectTagList(reqVo);
+        // 연관 태그 있는 경우 삭제
+        if(tagList.size() > 0) {
+            boardMapper.deleteTagList(reqVo);
+        }
+        // 게시글 삭제
+        return boardMapper.realDeleteBoard(reqVo);
     }
 
 

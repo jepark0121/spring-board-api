@@ -76,4 +76,23 @@
          WHERE BOARD_ID = #{boardId}
     </update>
 
+    <delete id="deleteTagList" parameterType="com.example.springboardapi.board.vo.BoardReqVo">
+        DELETE
+          FROM T_BOARD_TAG
+         WHERE 1=1
+           AND BOARD_ID = #{boardId}
+    </delete>
+
+    <delete id="realDeleteBoard">
+        DELETE
+          FROM T_BOARD
+         WHERE BOARD_ID = #{boardId}
+    </delete>
+
+    <select id="selectTagList" resultType="Integer">
+        SELECT BOARD_ID
+          FROM T_BOARD_TAG
+        WHERE BOARD_ID = #{boardId}
+    </select>
+
 </mapper>
