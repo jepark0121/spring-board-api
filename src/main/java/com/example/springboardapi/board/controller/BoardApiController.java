@@ -17,8 +17,6 @@ public class BoardApiController {
         this.boardService = boardService;
     }
 
-    CommonResponse res = new CommonResponse();
-
     // 게시글 목록 조회
     @GetMapping(path = "list")
     public ResponseEntity<CommonResponse> list(BoardReqVo reqVo) throws Exception {
