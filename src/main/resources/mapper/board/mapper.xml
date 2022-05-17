@@ -70,13 +70,13 @@
         WHERE BOARD_ID = #{boardId}
     </update>
 
-    <update id="deleteBoard" parameterType="com.example.springboardapi.board.vo.BoardReqVo">
+    <update id="deleteBoard" parameterType="int">
         UPDATE T_BOARD
            SET DELETE_YN = TRUE
          WHERE BOARD_ID = #{boardId}
     </update>
 
-    <delete id="deleteTagList" parameterType="com.example.springboardapi.board.vo.BoardReqVo">
+    <delete id="deleteTagList" parameterType="int">
         DELETE
           FROM T_BOARD_TAG
          WHERE 1=1

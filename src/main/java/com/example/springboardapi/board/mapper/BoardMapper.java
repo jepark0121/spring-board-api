@@ -3,6 +3,7 @@ package com.example.springboardapi.board.mapper;
 import com.example.springboardapi.board.model.Board;
 import com.example.springboardapi.board.vo.BoardReqVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 public interface BoardMapper {
     ArrayList<Board> selectBoardList();
 
-    Board selectBoardOne(BoardReqVo reqVo);
+    Board selectBoardOne(@Param("boardId")int boardId);
 
     int insertBoard(BoardReqVo reqVo);
 
@@ -20,12 +21,12 @@ public interface BoardMapper {
 
     int updateBoard(BoardReqVo reqVo);
 
-    int deleteBoard(BoardReqVo reqVo);
+    int deleteBoard(@Param("boardId")int boardId);
 
-    void deleteTagList(BoardReqVo reqVo);
+    void deleteTagList(@Param("boardId")int boardId);
 
-    int realDeleteBoard(BoardReqVo reqVo);
+    int realDeleteBoard(@Param("boardId")int boardId);
 
-    List<Integer> selectTagList(BoardReqVo reqVo);
+    List<Integer> selectTagList(@Param("boardId")int boardId);
 
 }

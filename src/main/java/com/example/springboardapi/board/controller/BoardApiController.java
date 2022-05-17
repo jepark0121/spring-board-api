@@ -27,8 +27,8 @@ public class BoardApiController {
 
     // 게시글 하나 조회
     @GetMapping(path = "one")
-    public ResponseEntity<CommonResponse> one(BoardReqVo reqVo) throws Exception {
-        return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.selectOne(reqVo)), HttpStatus.OK);
+    public ResponseEntity<CommonResponse> one(@RequestParam(name = "boardId")int boardId) throws Exception {
+        return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.selectOne(boardId)), HttpStatus.OK);
     }
 
     // 게시글 저장
@@ -44,14 +44,14 @@ public class BoardApiController {
     }
 
     // 게시글 삭제(업데이트)
-    @DeleteMapping(path = "fake-delete")
-    public ResponseEntity<CommonResponse> delete(BoardReqVo reqVo) throws Exception {
-        return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.delete(reqVo)), HttpStatus.OK);
+    @DeleteMapping(path = "fake-delete/{boardId}")
+    public ResponseEntity<CommonResponse> delete(@PathVariable int boardId) throws Exception {
+        return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.delete(boardId)), HttpStatus.OK);
     }
 
     // 게시글 삭제
-    @DeleteMapping(path = "delete")
-    public ResponseEntity<CommonResponse> realDelete(BoardReqVo reqVo) throws Exception {
-        return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.realDelete(reqVo)), HttpStatus.OK);
+    @DeleteMapping(path = "delete/{boardId}")
+    public ResponseEntity<CommonResponse> realDelete(@PathVariable int boardId) throws Exception {
+        return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.realDelete(boardId)), HttpStatus.OK);
     }
 }
