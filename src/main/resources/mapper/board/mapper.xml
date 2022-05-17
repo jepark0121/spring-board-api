@@ -90,7 +90,7 @@
     </delete>
 
     <select id="selectTagList" resultType="Integer">
-        SELECT BOARD_ID
+        SELECT TAG_ID
           FROM T_BOARD_TAG
         WHERE BOARD_ID = #{boardId}
     </select>
