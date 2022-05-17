@@ -22,7 +22,7 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public ArrayList<Board> selectList(BoardReqVo reqVo) {
+    public ArrayList<Board> selectList() {
         return boardMapper.selectBoardList();
     }
 
