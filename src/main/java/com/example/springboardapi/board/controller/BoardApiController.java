@@ -1,8 +1,9 @@
 package com.example.springboardapi.board.controller;
 
-import com.example.exception.CommonResponse;
+
 import com.example.springboardapi.board.vo.BoardReqVo;
 import com.example.springboardapi.board.service.BoardService;
+import com.example.springboardapi.exception.CommonResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

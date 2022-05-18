@@ -1,7 +1,8 @@
 package com.example.springboardapi;
 
-import com.example.exception.CommonResponse;
-import com.example.exception.ErrorCode;
+
+import com.example.springboardapi.exception.CommonResponse;
+import com.example.springboardapi.exception.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
