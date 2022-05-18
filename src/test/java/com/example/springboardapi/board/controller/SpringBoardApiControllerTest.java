@@ -1,4 +1,4 @@
-package com.example.springboardapi;
+package com.example.springboardapi.board.controller;
 
 import com.example.springboardapi.board.service.BoardService;
 import com.example.springboardapi.board.vo.BoardReqVo;
@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Log4j2
@@ -31,10 +32,6 @@ public class SpringBoardApiControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
-
-    @Autowired
-    BoardService boardService;
-
 
     @Test
     public void selectNoticeTest() throws Exception{
@@ -80,7 +77,47 @@ public class SpringBoardApiControllerTest {
                 .andExpect(result -> {
                     MockHttpServletResponse response = result.getResponse();
                     log.info(response.getContentAsString(StandardCharsets.UTF_8));
-                }).andExpect(status().isOk());
+                }).andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(1));
     }
+
+    @Test
+    public void updateNoticeTest() throws Exception{
+        String url = "/board/update";
+
+        List<String> tagList = new ArrayList<>();
+        tagList.add("tag5");
+        tagList.add("tag6");
+
+        BoardReqVo reqVo = new BoardReqVo();
+        reqVo.setBoardId(25);
+        reqVo.setContents("contents");
+        reqVo.setUpdateId("updateUser1");
+        reqVo.setTitle("title test22222");
+        reqVo.setTagList(tagList);
+
+        mockMvc.perform(MockMvcRequestBuilders.put(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(reqVo)))
+                .andExpect(result -> {
+                    MockHttpServletResponse response = result.getResponse();
+                    log.info(response.getContentAsString(StandardCharsets.UTF_8));
+                }).andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(1));
+    }
+
+    @Test
+    public void deleteNoticeTest() throws Exception{
+        String url = "/board/delete/27";
+
+        mockMvc.perform(MockMvcRequestBuilders.delete(url)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(result -> {
+                    MockHttpServletResponse response = result.getResponse();
+                    log.info(response.getContentAsString(StandardCharsets.UTF_8));
+                }).andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(1));
+    }
+
 
 }
