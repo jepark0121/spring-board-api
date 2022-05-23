@@ -6,9 +6,7 @@ import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 @Log4j2
@@ -26,10 +24,11 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
         super(request);
         try {
             InputStream is = request.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             if (is != null) {
                 StringBuffer sb = new StringBuffer();
                 while(true) {
-                    int data = is.read();
+                    int data = reader.read();
                     if (data < 0) break;
                     sb.append((char) data);
                 }
@@ -104,7 +103,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
         value = value.replaceAll("'", "& #39;");
         value = value.replaceAll("eval\\((.*)\\)", "");
         value = value.replaceAll("[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']", "\"\"");
-        value = value.replaceAll("script", "");
+        // value = value.replaceAll("script", "");
         log.info("XSS Filter after : " + value);
         return value;
     }
