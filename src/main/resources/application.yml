@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:log4jdbc:mysql://localhost:3306/skillUp?serverTimezone=UTC&autoReconnect=true&allowMultiQueries=true&characterEncoding=UTF-8
+    username: root
+    password: password1!
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+
+mybatis:
+  type-aliases-package: com.example.springboardapi.board.model
+  mapper-locations: mapper/**/*.xml
+
+server:
+  error:
+    include-message: always
+
