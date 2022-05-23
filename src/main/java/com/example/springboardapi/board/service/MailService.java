@@ -1,15 +1,11 @@
 package com.example.springboardapi.board.service;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
