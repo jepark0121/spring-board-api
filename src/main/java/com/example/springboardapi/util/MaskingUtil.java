@@ -1,7 +1,7 @@
 package com.example.springboardapi.util;
 
 public class MaskingUtil {
-    public static String masked(String name) {
+    public static String nameMasking(String name) {
         String masked = "";
         String middleName = "";
 

@@ -28,7 +28,7 @@ public class BoardService {
         ArrayList<Board> list = boardMapper.selectBoardList();
 
         list.stream().forEach(v -> {
-            v.setRegistId(MaskingUtil.masked(v.getRegistId()));
+            v.setRegistId(MaskingUtil.nameMasking(v.getRegistId()));
         });
 
         return list;
@@ -36,7 +36,9 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public Board selectOne(int boardId) {
-        return boardMapper.selectBoardOne(boardId);
+        Board board = boardMapper.selectBoardOne(boardId);
+        board.setRegistId(MaskingUtil.nameMasking(board.getRegistId()));
+        return board;
     }
 
 
