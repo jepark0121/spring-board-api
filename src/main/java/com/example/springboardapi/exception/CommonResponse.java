@@ -11,10 +11,18 @@ public class CommonResponse {
     private int status = ErrorCode.SUCCESS.getStatus();
     private Object data;
 
-    public CommonResponse(ErrorCode code, Object data) {
-        this.code = code.getCode();
-        this.message = code.getMessage();
-        this.status = code.getStatus();
+
+    public CommonResponse(String code, String message, int status) {
+        this.code = code;
+        this.message = message;
+        this.status = status;
+    }
+
+
+    public CommonResponse(String code, String message, int status, Object data) {
+        this.code = code;
+        this.message = message;
+        this.status = status;
         this.data = data;
     }
 
