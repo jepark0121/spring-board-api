@@ -1,6 +1,8 @@
 package com.example.springboardapi.board.controller;
 
 
+import com.example.springboardapi.board.model.Board;
+import com.example.springboardapi.board.service.MailService;
 import com.example.springboardapi.board.vo.BoardReqVo;
 import com.example.springboardapi.board.service.BoardService;
 import com.example.springboardapi.exception.CommonResponse;
@@ -16,8 +18,11 @@ public class BoardApiController {
 
     private final BoardService boardService;
 
-    public BoardApiController(BoardService boardService) {
+    private final MailService mailService;
+
+    public BoardApiController(BoardService boardService, MailService mailService) {
         this.boardService = boardService;
+        this.mailService = mailService;
     }
 
     // 게시글 목록 조회
@@ -47,12 +52,18 @@ public class BoardApiController {
     // 게시글 삭제(업데이트)
     @DeleteMapping(path = "fake-delete/{boardId}")
     public ResponseEntity<CommonResponse> delete(@PathVariable int boardId) throws Exception {
+        Board board = boardService.selectOne(boardId);
+        mailService.sendMail(board.getTitle());
+
         return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.delete(boardId)), HttpStatus.OK);
     }
 
     // 게시글 삭제
     @DeleteMapping(path = "delete/{boardId}")
     public ResponseEntity<CommonResponse> realDelete(@PathVariable int boardId) throws Exception {
+        Board board = boardService.selectOne(boardId);
+        mailService.sendMail(board.getTitle());
+
         return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.realDelete(boardId)), HttpStatus.OK);
     }
 }
