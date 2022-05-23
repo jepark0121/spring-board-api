@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,7 +38,7 @@ public class SpringBoardApiControllerTest {
     public void selectNoticeTest() throws Exception{
         String url = "/board/list";
 
-        mockMvc.perform(MockMvcRequestBuilders.get(url)
+        mockMvc.perform(get(url)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(result -> {
                     MockHttpServletResponse response = result.getResponse();
@@ -49,7 +50,7 @@ public class SpringBoardApiControllerTest {
     public void selectNoticeOneTest() throws Exception{
         String url = "/board/one/25";
 
-        mockMvc.perform(MockMvcRequestBuilders.get(url)
+        mockMvc.perform(get(url)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(result -> {
                     MockHttpServletResponse response = result.getResponse();
