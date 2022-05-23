@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springboardapi.board.mapper.BoardMapper">
+
+    <select id="selectBoardList" resultType="Board">
+        SELECT TB.BOARD_ID              AS boardId
+               , TB.TITLE               AS title
+               , TB.CONTENTS            AS contents
+               , TB.REGIST_ID           AS registId
+               , GROUP_CONCAT(TBT.TAG)  AS tagList
+          FROM T_BOARD TB
+               LEFT OUTER JOIN T_BOARD_TAG TBT
+                            ON TB.BOARD_ID = TBT.BOARD_ID
+         WHERE 1=1
+           AND TB.DELETE_YN = FALSE
+        GROUP BY TB.BOARD_ID, TB.TITLE, TB.CONTENTS, TB.REGIST_ID, TB.REGIST_DATE
+        ORDER BY TB.BOARD_ID DESC
+    </select>
+
+    <select id="selectBoardOne" resultType="Board">
+        SELECT TB.BOARD_ID              AS boardId
+               , TB.TITLE               AS title
+               , TB.CONTENTS            AS contents
+               , TB.REGIST_ID           AS registId
+               , GROUP_CONCAT(TBT.TAG)  AS tagList
+          FROM T_BOARD TB
+               LEFT OUTER JOIN T_BOARD_TAG TBT
+                            ON TB.BOARD_ID = TBT.BOARD_ID
+         WHERE 1=1
+           AND TB.BOARD_ID = #{boardId}
+           AND TB.DELETE_YN = FALSE
+         GROUP BY TB.BOARD_ID, TB.TITLE, TB.CONTENTS, TB.REGIST_ID, TB.REGIST_DATE
+         ORDER BY TB.BOARD_ID DESC
+    </select>
+
+    <insert id="insertBoard" parameterType="com.example.springboardapi.board.vo.BoardReqVo" useGeneratedKeys="true" keyProperty="boardId">
+        INSERT INTO T_BOARD (
+            TITLE
+            , CONTENTS
+            , REGIST_ID
+        ) VALUES (
+            #{title}
+            , #{contents}
+            , #{registId}
+        )
+    </insert>
+
+    <insert id="insertBoardTags" parameterType="com.example.springboardapi.board.vo.BoardReqVo">
+        INSERT INTO T_BOARD_TAG (
+            BOARD_ID
+            , TAG
+        ) VALUES
+        <foreach item="item" collection="tagList" separator=",">
+            (
+                #{boardId}
+                , #{item}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateBoard" parameterType="com.example.springboardapi.board.vo.BoardReqVo">
+        UPDATE T_BOARD
+          SET UPDATE_ID = #{updateId}
+          <if test="title != null">
+              , TITLE = #{title}
+          </if>
+          <if test="title != null">
+              , CONTENTS = #{contents}
+          </if>
+        WHERE BOARD_ID = #{boardId}
+    </update>
+
+    <update id="deleteBoard" parameterType="int">
+        UPDATE T_BOARD
+           SET DELETE_YN = TRUE
+         WHERE BOARD_ID = #{boardId}
+    </update>
+
+    <delete id="deleteTagList" parameterType="int">
+        DELETE
+          FROM T_BOARD_TAG
+         WHERE 1=1
+           AND BOARD_ID = #{boardId}
+    </delete>
+
+    <delete id="realDeleteBoard">
+        DELETE
+          FROM T_BOARD
+         WHERE BOARD_ID = #{boardId}
+    </delete>
+
+    <select id="selectTagList" resultType="Integer">
+        SELECT TAG_ID
+          FROM T_BOARD_TAG
+        WHERE BOARD_ID = #{boardId}
+    </select>
+
+</mapper>
