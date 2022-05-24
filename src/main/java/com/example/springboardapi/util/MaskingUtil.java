@@ -21,11 +21,7 @@ public class MaskingUtil {
         StringBuilder stringBuilder = new StringBuilder();
         char[] chars = name.trim().toCharArray();
         for(int i=0; i<name.trim().length(); i++) {
-            if(i >= startIndex && i < endIndex) {
-                stringBuilder.append("*");
-            } else {
-                stringBuilder.append(chars[i]);
-            }
+            stringBuilder.append(i >= startIndex && i < endIndex ? "*" : chars[i]);
         }
 
         return stringBuilder.toString();
