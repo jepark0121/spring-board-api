@@ -38,6 +38,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
     implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+    implementation 'joda-time:joda-time:2.10.14'
 }
 
 tasks.named('test') {
