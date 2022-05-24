@@ -3,7 +3,7 @@ package com.example.springboardapi.exception;
 public enum ErrorCode {
 
     SUCCESS(200, "COO0", "응답 성공"),
-    INVALID_PARAMETER(500, "COO1", "파라미터 오류, 관리자에 문의하세요."),
+    INVALID_PARAMETER(500, "COO1", "서버 오류, 관리자에 문의하세요."),
     NOT_FOUND(404, "C002", "정보를 찾을수 없습니다.");
 
     private final String code;
