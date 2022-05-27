@@ -1,6 +1,7 @@
 package com.example.springboardapi.filter;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -10,6 +11,7 @@ import java.io.IOException;
 
 @Log4j2
 @WebFilter(urlPatterns= "/*")
+@Component
 public class XSSFilter implements Filter {
     public FilterConfig filterConfig;
 
