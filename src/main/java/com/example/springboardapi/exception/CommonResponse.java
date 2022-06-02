@@ -6,21 +6,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CommonResponse {
-    private String code = ErrorCode.SUCCESS.getCode();
     private String message = ErrorCode.SUCCESS.getMessage();
     private int status = ErrorCode.SUCCESS.getStatus();
     private Object data;
 
+    public CommonResponse(String code, String message) {
+        this.message = message;
+    }
 
-    public CommonResponse(String code, String message, int status) {
-        this.code = code;
+    public CommonResponse(String message, int status) {
         this.message = message;
         this.status = status;
     }
 
 
-    public CommonResponse(String code, String message, int status, Object data) {
-        this.code = code;
+    public CommonResponse(String message, int status, Object data) {
         this.message = message;
         this.status = status;
         this.data = data;

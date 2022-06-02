@@ -4,46 +4,77 @@ package com.example.springboardapi.config;
 import com.example.springboardapi.exception.CommonResponse;
 import com.example.springboardapi.exception.ErrorCode;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.client.HttpServerErrorException;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @RestControllerAdvice
 public class ApiExceptionHandler extends RuntimeException{
 
-    private ResponseEntity<CommonResponse> customResponse(String code, String message, int status, HttpStatus httpStatus) {
+    private ResponseEntity<CommonResponse> customResponse(String message, int status, HttpStatus httpStatus) {
         CommonResponse commonResponse = new CommonResponse();
-        commonResponse.setCode(code);
         commonResponse.setMessage(message);
         commonResponse.setStatus(status);
 
         return new ResponseEntity<CommonResponse>(commonResponse, httpStatus);
     }
 
-    @ExceptionHandler(NullPointerException.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<CommonResponse> NullPointException(Exception e) {
         log.error("Exception Type : {}", e.getClass().getSimpleName());
         log.error("Exception Message : {}", e.getMessage());
 
-        return customResponse(ErrorCode.NOT_FOUND.getCode(), ErrorCode.NOT_FOUND.getMessage()
-                , HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND);
-    }
-
-
-    @ExceptionHandler({
-            IllegalArgumentException.class, TypeMismatchException.class,
-            ArrayIndexOutOfBoundsException.class, NumberFormatException.class
-    })
-    public ResponseEntity<CommonResponse> Exception(Exception e) {
-        log.error("Exception Type : {}", e.getClass().getSimpleName());
-        log.error("Exception Message : {}", e.getMessage());
-
-        return customResponse(ErrorCode.INVALID_PARAMETER.getCode(), ErrorCode.INVALID_PARAMETER.getMessage()
+        return customResponse(ErrorCode.INTERNER_SERVER_ERROR.getMessage()
                 , HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
+    // PathVariable Valid Check...
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<CommonResponse> badPathException(ConstraintViolationException e) {
+               List<Map<String, String>> errors = new ArrayList<>();
+        for(ConstraintViolation<?> error : e.getConstraintViolations()) {
+            Map<String, String> map = new HashMap<>();
+            map.put("fieldName", error.getPropertyPath().toString());
+            map.put("errorMsg", error.getMessage());
+
+            errors.add(map);
+        }
+
+        String fieldName = errors.get(0).get("fieldName");
+        String errorMsg = ErrorCode.valueOf(errors.get(0).get("errorMsg")).getMessage();
+        int errorCode = ErrorCode.valueOf(errors.get(0).get("errorMsg")).getStatus();
+
+        return customResponse(String.format(errorMsg, fieldName), errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+    // RequestBody Valid Check...
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<CommonResponse> badValidException(MethodArgumentNotValidException e) {
+        List<FieldError> errors = new ArrayList<FieldError>();
+        for(FieldError fieldError : e.getBindingResult().getFieldErrors()){
+            log.error(fieldError.getField());
+            log.error(fieldError.getCode());
+            errors.add(fieldError);
+        }
+
+        String fieldName = errors.get(0).getField();
+        String errorMsg = ErrorCode.valueOf(errors.get(0).getDefaultMessage()).getMessage();
+        int errorCode = ErrorCode.valueOf(errors.get(0).getDefaultMessage()).getStatus();
+
+        return customResponse(String.format(errorMsg, fieldName), errorCode, HttpStatus.BAD_REQUEST);
+    }
+
+
 }

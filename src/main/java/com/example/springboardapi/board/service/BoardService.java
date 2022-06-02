@@ -1,16 +1,14 @@
 package com.example.springboardapi.board.service;
 
 import com.example.springboardapi.board.model.Board;
-import com.example.springboardapi.board.vo.BoardReqVo;
+import com.example.springboardapi.board.vo.BoardInsertReqVo;
 import com.example.springboardapi.board.mapper.BoardMapper;
+import com.example.springboardapi.board.vo.BoardUpdateReqVo;
 import com.example.springboardapi.util.MaskingUtil;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -42,16 +40,22 @@ public class BoardService {
     }
 
 
-    public int save(BoardReqVo reqVo) {
+    public int save(BoardInsertReqVo reqVo) {
         int count = 0;
         // 게시글 저장
         count = boardMapper.insertBoard(reqVo);
         // 게시글 태그 저장
-        boardMapper.insertBoardTags(reqVo);
+        BoardUpdateReqVo updateReqVo = new BoardUpdateReqVo();
+        updateReqVo.setBoardId(reqVo.getBoardId());
+        updateReqVo.setTitle(reqVo.getTitle());
+        updateReqVo.setContents(reqVo.getContents());
+        updateReqVo.setTagList(reqVo.getTagList());
+        boardMapper.insertBoardTags(updateReqVo);
+
         return count;
     }
 
-    public int update(BoardReqVo reqVo) {
+    public int update(BoardUpdateReqVo reqVo) {
         int count = 0;
         // 게시글 수정
         count = boardMapper.updateBoard(reqVo);

@@ -1,10 +1,10 @@
 package com.example.springboardapi.board.mapper;
 
 import com.example.springboardapi.board.model.Board;
-import com.example.springboardapi.board.vo.BoardReqVo;
+import com.example.springboardapi.board.vo.BoardInsertReqVo;
+import com.example.springboardapi.board.vo.BoardUpdateReqVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +15,11 @@ public interface BoardMapper {
 
     Board selectBoardOne(@Param("boardId")int boardId);
 
-    int insertBoard(BoardReqVo reqVo);
+    int insertBoard(BoardInsertReqVo reqVo);
 
-    void insertBoardTags(BoardReqVo reqVo);
+    void insertBoardTags(BoardUpdateReqVo reqVo);
 
-    int updateBoard(BoardReqVo reqVo);
+    int updateBoard(BoardUpdateReqVo reqVo);
 
     int deleteBoard(@Param("boardId")int boardId);
 

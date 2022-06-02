@@ -33,19 +33,23 @@
          ORDER BY TB.BOARD_ID DESC
     </select>
 
-    <insert id="insertBoard" parameterType="com.example.springboardapi.board.vo.BoardReqVo" useGeneratedKeys="true" keyProperty="boardId">
+    <insert id="insertBoard" parameterType="com.example.springboardapi.board.vo.BoardInsertReqVo" useGeneratedKeys="true" keyProperty="boardId">
         INSERT INTO T_BOARD (
             TITLE
             , CONTENTS
+        <if test='registId != null and registId != ""'>
             , REGIST_ID
+        </if>
         ) VALUES (
             #{title}
             , #{contents}
+        <if test='registId != null and registId != ""'>
             , #{registId}
+        </if>
         )
     </insert>
 
-    <insert id="insertBoardTags" parameterType="com.example.springboardapi.board.vo.BoardReqVo">
+    <insert id="insertBoardTags" parameterType="com.example.springboardapi.board.vo.BoardInsertReqVo">
         INSERT INTO T_BOARD_TAG (
             BOARD_ID
             , TAG
@@ -58,7 +62,7 @@
         </foreach>
     </insert>
 
-    <update id="updateBoard" parameterType="com.example.springboardapi.board.vo.BoardReqVo">
+    <update id="updateBoard" parameterType="com.example.springboardapi.board.vo.BoardInsertReqVo">
         UPDATE T_BOARD
           SET UPDATE_ID = #{updateId}
           <if test="title != null">
