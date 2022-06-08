@@ -7,6 +7,7 @@ import com.example.springboardapi.board.vo.BoardInsertReqVo;
 import com.example.springboardapi.board.service.BoardService;
 import com.example.springboardapi.board.vo.BoardUpdateReqVo;
 import com.example.springboardapi.exception.CommonResponse;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -22,8 +23,9 @@ import javax.validation.constraints.NotNull;
 
 @Log4j2
 @Validated
+@Api(tags = {"Board API Test"})
 @RestController
-@RequestMapping(path = "/board/", produces = { "application/json;charset=UTF-8" })
+@RequestMapping(path = "/board/")
 public class BoardApiController {
 
     private final BoardService boardService;
