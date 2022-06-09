@@ -52,9 +52,9 @@ public class ApiExceptionHandler extends RuntimeException{
             errors.add(map);
         }
 
-        String fieldName = errors.get(0).get("fieldName");
-        String errorMsg = ErrorCode.valueOf(errors.get(0).get("errorMsg")).getMessage();
-        int errorCode = ErrorCode.valueOf(errors.get(0).get("errorMsg")).getStatus();
+        String fieldName = errors.stream().findFirst().get().get("fieldName");
+        String errorMsg = ErrorCode.valueOf(errors.stream().findFirst().get().get("errorMsg")).getMessage();
+        int errorCode = ErrorCode.valueOf(errors.stream().findFirst().get().get("errorMsg")).getStatus();
 
         return customResponse(String.format(errorMsg, fieldName), errorCode, HttpStatus.BAD_REQUEST);
     }
@@ -69,9 +69,9 @@ public class ApiExceptionHandler extends RuntimeException{
             errors.add(fieldError);
         }
 
-        String fieldName = errors.get(0).getField();
-        String errorMsg = ErrorCode.valueOf(errors.get(0).getDefaultMessage()).getMessage();
-        int errorCode = ErrorCode.valueOf(errors.get(0).getDefaultMessage()).getStatus();
+        String fieldName = errors.stream().findFirst().get().getField();
+        String errorMsg = ErrorCode.valueOf(errors.stream().findFirst().get().getDefaultMessage()).getMessage();
+        int errorCode = ErrorCode.valueOf(errors.stream().findFirst().get().getDefaultMessage()).getStatus();
 
         return customResponse(String.format(errorMsg, fieldName), errorCode, HttpStatus.BAD_REQUEST);
     }
