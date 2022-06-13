@@ -9,7 +9,10 @@ public enum ErrorCode {
     VALID_NOT_NULL(501 ,"%s 을(를) 확인해주세요."),
     LENGTH_ERROR(502 ,"%s 은(는) 200 글자를 넘을 수 없습니다."),
     DUPLICATE_ERROR(503 ,"%s 은(는) 중복된 값을 넣을 수 없습니다."),
-    MAX_SIZE_ERROR(504 ,"%s 은(는) 5개 까지 입력 할 수 있습니다.");
+    MAX_SIZE_ERROR(504 ,"%s 은(는) 5개 까지 입력 할 수 있습니다."),
+    FILE_EMPTY(505 ,"파일이 존재하지 않습니다."),
+    FILE_EXT_ERROR(506 ,"엑셀 파일이 아닙니다."),
+    ;
 
 
     private final String message;

@@ -7,6 +7,7 @@ import com.example.springboardapi.board.vo.BoardInsertReqVo;
 import com.example.springboardapi.board.service.BoardService;
 import com.example.springboardapi.board.vo.BoardUpdateReqVo;
 import com.example.springboardapi.exception.CommonResponse;
+import com.example.springboardapi.exception.ErrorCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -86,7 +87,7 @@ public class BoardApiController {
     @ApiImplicitParam(name = "boardId", value = "게시글 ID", required = true, dataType = "int", paramType = "path", defaultValue = "45")
     @DeleteMapping(path = "delete/{boardId}")
     public ResponseEntity<CommonResponse> realDelete(@PathVariable @Min(value = 1, message = "VALID_NOT_NULL")
-                                                         @NotNull(message = "VALID_NOT_NULL")  int boardId) throws Exception {
+                                                     @NotNull(message = "VALID_NOT_NULL") int boardId) throws Exception {
         Board board = boardService.selectOne(boardId);
         mailService.sendMail(board.getTitle());
 
@@ -95,19 +96,28 @@ public class BoardApiController {
 
     @ApiOperation(value = "엑셀 데이터 업로드", notes = "엑셀데이터를 업로드 합니다.")
     @PostMapping(path = "upload/excel", consumes = {"multipart/form-data"})
-    public void uploadExcel(@RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile) {
-
+    public ResponseEntity<CommonResponse> uploadExcel(@RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile) throws Exception {
+        String message = "";
+        int code = 0;
+        HttpStatus httpStatus = null;
         if (uploadFile.isEmpty()) {
-           // TODO: 없을 때 처리
+           message = ErrorCode.FILE_EMPTY.getMessage();
+           code = ErrorCode.FILE_EMPTY.getStatus();
+           httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            return new ResponseEntity<CommonResponse>(new CommonResponse(message, code), httpStatus);
         } else {
             String originalFilename = uploadFile.getOriginalFilename();
             String ext = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
             log.info(ext);
-            if(!ext.equals("xlsx") && !ext.equals("xls") ) {
-                // TODO: excel 파일이 아닐 때 처리
+            if (!ext.equals("xlsx") && !ext.equals("xls")) {
+                message = ErrorCode.FILE_EXT_ERROR.getMessage();
+                code = ErrorCode.FILE_EXT_ERROR.getStatus();
+                httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+                return new ResponseEntity<CommonResponse>(new CommonResponse(message, code), httpStatus);
             } else {
-                boardService.uploadExcel(uploadFile, ext);
+                return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.uploadExcel(uploadFile, ext)), HttpStatus.OK);
             }
+
         }
     }
 }

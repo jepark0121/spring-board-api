@@ -6,7 +6,6 @@ import com.example.springboardapi.board.mapper.BoardMapper;
 import com.example.springboardapi.board.vo.BoardUpdateReqVo;
 import com.example.springboardapi.util.ExcelUtil;
 import com.example.springboardapi.util.MaskingUtil;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Transactional
@@ -89,9 +89,10 @@ public class BoardService {
     }
 
 
-    public void uploadExcel(MultipartFile uploadFile, String ext) {
+    public AtomicInteger uploadExcel(MultipartFile uploadFile, String ext) {
+        AtomicInteger count = new AtomicInteger();
         List<Map<Object, Object>> list = ExcelUtil.readExcel(uploadFile, ext);
-        System.out.println(list.toString());
+
         list.stream().forEach(v -> {
             BoardInsertReqVo reqVo = new BoardInsertReqVo();
 
@@ -103,9 +104,10 @@ public class BoardService {
             reqVo.setRegistId(v.get("registId").toString());
             reqVo.setTagList(tagList);
 
-            save(reqVo);
+            count.addAndGet(save(reqVo));
         });
-
         // TODO : 실패 메일 발송
+        return count;
+
     }
 }
