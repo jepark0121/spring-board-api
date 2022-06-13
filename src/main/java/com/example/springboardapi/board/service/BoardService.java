@@ -7,6 +7,7 @@ import com.example.springboardapi.board.vo.BoardUpdateReqVo;
 import com.example.springboardapi.util.ExcelUtil;
 import com.example.springboardapi.util.MaskingUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,7 +44,6 @@ public class BoardService {
         board.setRegistId(MaskingUtil.nameMasking(board.getRegistId()));
         return board;
     }
-
 
     public int save(BoardInsertReqVo reqVo) {
         int count = 0;
@@ -88,25 +88,30 @@ public class BoardService {
         return boardMapper.realDeleteBoard(boardId);
     }
 
-
     public AtomicInteger uploadExcel(MultipartFile uploadFile, String ext) {
         AtomicInteger count = new AtomicInteger();
         List<Map<Object, Object>> list = ExcelUtil.readExcel(uploadFile, ext);
 
         list.stream().forEach(v -> {
-            BoardInsertReqVo reqVo = new BoardInsertReqVo();
+            try {
+                BoardInsertReqVo reqVo = new BoardInsertReqVo();
 
-            String tags = v.get("tags").toString();
-            List<String> tagList = Arrays.asList(tags.split("\\s*,\\s*"));
+                String tags = v.get("tags").toString();
+                List<String> tagList = Arrays.asList(tags.split("\\s*,\\s*"));
 
-            reqVo.setTitle(v.get("title").toString());
-            reqVo.setContents(v.get("contents").toString());
-            reqVo.setRegistId(v.get("registId").toString());
-            reqVo.setTagList(tagList);
+                reqVo.setTitle(v.get("title").toString());
+                reqVo.setContents(v.get("contents").toString());
+                reqVo.setRegistId(v.get("registId").toString());
+                reqVo.setTagList(tagList);
 
-            count.addAndGet(save(reqVo));
+                count.addAndGet(save(reqVo));
+            } catch (Exception e) {
+                // TODO : 실패 메일 발송
+
+                e.printStackTrace();
+            }
+
         });
-        // TODO : 실패 메일 발송
         return count;
 
     }
