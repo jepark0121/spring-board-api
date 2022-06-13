@@ -2,6 +2,7 @@ package com.example.springboardapi.board.controller;
 
 
 import com.example.springboardapi.board.model.Board;
+import com.example.springboardapi.board.model.Mail;
 import com.example.springboardapi.board.service.MailService;
 import com.example.springboardapi.board.vo.BoardInsertReqVo;
 import com.example.springboardapi.board.service.BoardService;
@@ -10,16 +11,16 @@ import com.example.springboardapi.exception.CommonResponse;
 import com.example.springboardapi.exception.ErrorCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -79,7 +80,16 @@ public class BoardApiController {
     public ResponseEntity<CommonResponse> delete(@PathVariable @Min(value = 1, message = "VALID_NOT_NULL")
                                                      @NotNull(message = "VALID_NOT_NULL") int boardId) throws Exception {
         Board board = boardService.selectOne(boardId);
-        mailService.sendMail(board.getTitle());
+
+        DateTimeFormatter dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        String subject = "[게시글 삭제] “" + board.getTitle() + "” 이(가) 삭제 되었습니다.";
+        String text = dateTime.print(new DateTime()) + "에 해당 게시글이 삭제되었습니다.";
+
+        Mail mail = new Mail();
+        mail.setSubject(subject);
+        mail.setText(text);
+
+        mailService.sendMail(mail);
 
         return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.delete(boardId)), HttpStatus.OK);
     }
@@ -91,7 +101,16 @@ public class BoardApiController {
     public ResponseEntity<CommonResponse> realDelete(@PathVariable @Min(value = 1, message = "VALID_NOT_NULL")
                                                      @NotNull(message = "VALID_NOT_NULL") int boardId) throws Exception {
         Board board = boardService.selectOne(boardId);
-        mailService.sendMail(board.getTitle());
+
+        DateTimeFormatter dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        String subject = "[게시글 삭제] “" + board.getTitle() + "” 이(가) 삭제 되었습니다.";
+        String text = dateTime.print(new DateTime()) + "에 해당 게시글이 삭제되었습니다.";
+
+        Mail mail = new Mail();
+        mail.setSubject(subject);
+        mail.setText(text);
+
+        mailService.sendMail(mail);
 
         return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.realDelete(boardId)), HttpStatus.OK);
     }

@@ -1,5 +1,6 @@
 package com.example.springboardapi.board.service;
 
+import com.example.springboardapi.board.model.Mail;
 import lombok.extern.log4j.Log4j2;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -22,17 +23,13 @@ public class MailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendMail(String title) {
-        DateTimeFormatter dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-
+    public void sendMail(Mail mail) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        String subject = "[게시글 삭제] “" + title + "” 이(가) 삭제 되었습니다.";
-        String text = dateTime.print(new DateTime()) + "에 해당 게시글이 삭제되었습니다.";
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,"UTF-8"); // use multipart (true)
 
-            mimeMessageHelper.setSubject(subject); // Base64 encoding
-            mimeMessageHelper.setText(text);
+            mimeMessageHelper.setSubject(mail.getSubject()); // Base64 encoding
+            mimeMessageHelper.setText(mail.getText());
             mimeMessageHelper.setFrom(SENDER_EMAIL);
             mimeMessageHelper.setTo(SENDER_EMAIL);
 

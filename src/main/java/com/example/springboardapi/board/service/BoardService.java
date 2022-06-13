@@ -1,18 +1,17 @@
 package com.example.springboardapi.board.service;
 
 import com.example.springboardapi.board.model.Board;
+import com.example.springboardapi.board.model.Mail;
 import com.example.springboardapi.board.vo.BoardInsertReqVo;
 import com.example.springboardapi.board.mapper.BoardMapper;
 import com.example.springboardapi.board.vo.BoardUpdateReqVo;
 import com.example.springboardapi.util.ExcelUtil;
 import com.example.springboardapi.util.MaskingUtil;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,8 +28,11 @@ public class BoardService {
 
     private final BoardMapper boardMapper;
 
-    public BoardService(BoardMapper boardMapper) {
+    private final MailService mailService;
+
+    public BoardService(BoardMapper boardMapper, MailService mailService) {
         this.boardMapper = boardMapper;
+        this.mailService = mailService;
     }
 
     @Transactional(readOnly = true)
@@ -97,6 +99,7 @@ public class BoardService {
     public AtomicInteger uploadExcel(MultipartFile uploadFile, String ext) {
         AtomicInteger count = new AtomicInteger();
         List<Map<Object, Object>> list = ExcelUtil.readExcel(uploadFile, ext);
+        List<Map<Object, Object>> errList = new ArrayList<>();
 
         list.stream().forEach(v -> {
             try {
@@ -112,11 +115,21 @@ public class BoardService {
 
                 count.addAndGet(save(reqVo));
             } catch (Exception e) {
-                // TODO : 실패 메일 발송
+                errList.add(v);
                 e.printStackTrace();
             }
-
         });
+
+        if(errList.size() > 0) {
+            String subject = "데이터 저장 실패";
+            String text = errList.toString();
+
+            Mail mail = new Mail();
+            mail.setSubject(subject);
+            mail.setText(text);
+            mailService.sendMail(mail);
+        }
+
         return count;
 
     }
