@@ -4,12 +4,17 @@ import com.example.springboardapi.board.model.Board;
 import com.example.springboardapi.board.vo.BoardInsertReqVo;
 import com.example.springboardapi.board.mapper.BoardMapper;
 import com.example.springboardapi.board.vo.BoardUpdateReqVo;
+import com.example.springboardapi.util.ExcelUtil;
 import com.example.springboardapi.util.MaskingUtil;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -84,4 +89,23 @@ public class BoardService {
     }
 
 
+    public void uploadExcel(MultipartFile uploadFile, String ext) {
+        List<Map<Object, Object>> list = ExcelUtil.readExcel(uploadFile, ext);
+        System.out.println(list.toString());
+        list.stream().forEach(v -> {
+            BoardInsertReqVo reqVo = new BoardInsertReqVo();
+
+            String tags = v.get("tags").toString();
+            List<String> tagList = Arrays.asList(tags.split("\\s*,\\s*"));
+
+            reqVo.setTitle(v.get("title").toString());
+            reqVo.setContents(v.get("contents").toString());
+            reqVo.setRegistId(v.get("registId").toString());
+            reqVo.setTagList(tagList);
+
+            save(reqVo);
+        });
+
+        // TODO : 실패 메일 발송
+    }
 }

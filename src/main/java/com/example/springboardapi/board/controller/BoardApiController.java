@@ -16,10 +16,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Iterator;
 
 @Log4j2
 @Validated
@@ -87,5 +91,23 @@ public class BoardApiController {
         mailService.sendMail(board.getTitle());
 
         return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.realDelete(boardId)), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "엑셀 데이터 업로드", notes = "엑셀데이터를 업로드 합니다.")
+    @PostMapping(path = "upload/excel", consumes = {"multipart/form-data"})
+    public void uploadExcel(@RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile) {
+
+        if (uploadFile.isEmpty()) {
+           // TODO: 없을 때 처리
+        } else {
+            String originalFilename = uploadFile.getOriginalFilename();
+            String ext = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+            log.info(ext);
+            if(!ext.equals("xlsx") && !ext.equals("xls") ) {
+                // TODO: excel 파일이 아닐 때 처리
+            } else {
+                boardService.uploadExcel(uploadFile, ext);
+            }
+        }
     }
 }

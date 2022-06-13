@@ -27,8 +27,14 @@ public class XSSFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        String path = ((HttpServletRequest) request).getServletPath();
+        log.info("path ::", path);
 
-        chain.doFilter(new XSSRequestWrapper((HttpServletRequest) request), response);
+        if(!path.contains("upload")) {
+            chain.doFilter(new XSSRequestWrapper((HttpServletRequest) request), response);
+        } else {
+            chain.doFilter(request, response);
+        }
 
     }
 
