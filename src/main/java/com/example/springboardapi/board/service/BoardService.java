@@ -6,11 +6,17 @@ import com.example.springboardapi.board.mapper.BoardMapper;
 import com.example.springboardapi.board.vo.BoardUpdateReqVo;
 import com.example.springboardapi.util.ExcelUtil;
 import com.example.springboardapi.util.MaskingUtil;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -107,12 +113,43 @@ public class BoardService {
                 count.addAndGet(save(reqVo));
             } catch (Exception e) {
                 // TODO : 실패 메일 발송
-
                 e.printStackTrace();
             }
 
         });
         return count;
 
+    }
+
+    public void downloadExcel(List<Board> list, HttpServletResponse res) {
+        try{
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("게시글리스트");
+            int rowNo = 0;
+
+            Row headerRow = sheet.createRow(rowNo++);
+            headerRow.createCell(0).setCellValue("제목");
+            headerRow.createCell(1).setCellValue("내용");
+            headerRow.createCell(2).setCellValue("작성자");
+            headerRow.createCell(3).setCellValue("태그");
+
+            for (Board board : list) {
+                Row row = sheet.createRow(rowNo++);
+                row.createCell(0).setCellValue(board.getTitle());
+                row.createCell(1).setCellValue(board.getContents());
+                row.createCell(2).setCellValue(board.getRegistId());
+                row.createCell(3).setCellValue(board.getTagList());
+            }
+
+            String fileName = "게시글 일괄 다운로드.xlsx";
+            fileName = new String (fileName.getBytes("UTF-8"),"ISO-8859-1");
+            res.setContentType("ms-vnd/excel;");
+            res.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+
+            workbook.write(res.getOutputStream());
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

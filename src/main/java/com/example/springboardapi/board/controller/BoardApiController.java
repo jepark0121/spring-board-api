@@ -21,10 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Iterator;
+import java.util.List;
 
 @Log4j2
 @Validated
@@ -119,5 +121,12 @@ public class BoardApiController {
             }
 
         }
+    }
+
+    @ApiOperation(value = "게시글 리스트 엑셀 다운로드", notes = "게시글을 엑셀파일로 다운로드 합니다.")
+    @GetMapping(path = "download/excel")
+    public void downloadExcel(HttpServletResponse res){
+        List<Board> list = boardService.selectList();
+        boardService.downloadExcel(list, res);
     }
 }
