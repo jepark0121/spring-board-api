@@ -17,10 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -97,9 +94,9 @@ public class BoardService {
         return boardMapper.realDeleteBoard(boardId);
     }
 
-    public AtomicInteger uploadExcel(MultipartFile uploadFile, String ext) throws IOException {
+    public AtomicInteger uploadExcel(MultipartFile uploadFile) throws IOException {
         AtomicInteger count = new AtomicInteger();
-        List<Map<Object, Object>> list = ExcelUtil.readExcel(uploadFile, ext);
+        List<Map<Object, Object>> list = ExcelUtil.readExcel(uploadFile);
         List<Map<Object, Object>> errList = new ArrayList<>();
 
         list.stream().forEach(v -> {

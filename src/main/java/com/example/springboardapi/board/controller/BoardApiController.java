@@ -136,7 +136,7 @@ public class BoardApiController {
                 httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
                 return new ResponseEntity<CommonResponse>(new CommonResponse(message, code), httpStatus);
             } else {
-                return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.uploadExcel(uploadFile, ext)), HttpStatus.OK);
+                return new ResponseEntity<CommonResponse>(new CommonResponse(boardService.uploadExcel(uploadFile)), HttpStatus.OK);
             }
 
         }
