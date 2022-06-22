@@ -1,6 +1,7 @@
 package com.example.springboardapi.board.controller;
 
 import com.example.springboardapi.board.vo.BoardInsertReqVo;
+import com.example.springboardapi.board.vo.BoardUpdateReqVo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -89,7 +90,7 @@ public class SpringBoardApiControllerTest {
         tagList.add("tag5");
         tagList.add("tag6");
 
-        BoardInsertReqVo reqVo = new BoardInsertReqVo();
+        BoardUpdateReqVo reqVo = new BoardUpdateReqVo();
         reqVo.setBoardId(25);
         reqVo.setContents("contents");
         reqVo.setUpdateId("updateUser1");
