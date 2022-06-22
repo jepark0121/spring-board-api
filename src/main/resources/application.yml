@@ -1,0 +1,42 @@
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      location: servlet
+      max-file-size: 10MB
+      max-request-size: 20MB
+  datasource:
+    url: ENC(fgC2jcvAsRK9b+JV2Pn60WQIgP5q3avpXWLYnahwJkUzo86HCYjd388BcpaG8CuYWGZ24Kx6AvTEvGOL6mmFT71/6Xp/whmcqAFFbCbJKZo8+1UwrvwLMGjGv8uKF1doNHCR++hpMIB/ti099BlrcKYo81zJkc6s6oVwC1z4zwzlyle0ba2mmpPwMgA1R7pi)
+    username: ENC(yAY6LgutunaoDP2577E/Qw==)
+    password: ENC(z6iqjKnuhdN90dzOyNKfS6cR3/t99V+L)
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  mail:
+    host: mail.bbubbush.com
+    port: 587
+    username: upskilling
+    password: gsitm123!@#
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: mail.bbubbush.com
+            protocols: TLSv1.2
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+mybatis:
+  type-aliases-package: com.example.springboardapi.board.model
+  mapper-locations: mapper/**/*.xml
+
+server:
+  error:
+    include-message: always
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+    password: ${ENC_KEY}

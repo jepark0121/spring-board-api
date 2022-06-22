@@ -45,9 +45,7 @@ public class ExcelSheetHandler implements XSSFSheetXMLHandler.SheetContentsHandl
             rows.add(new ArrayList(row));
         }
         row.clear();
-
         this.count++;
-
     }
 
     @Override
