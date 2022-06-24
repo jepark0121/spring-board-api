@@ -7,8 +7,8 @@ spring:
       max-request-size: 20MB
   datasource:
     url: ENC(fgC2jcvAsRK9b+JV2Pn60WQIgP5q3avpXWLYnahwJkUzo86HCYjd388BcpaG8CuYWGZ24Kx6AvTEvGOL6mmFT71/6Xp/whmcqAFFbCbJKZo8+1UwrvwLMGjGv8uKF1doNHCR++hpMIB/ti099BlrcKYo81zJkc6s6oVwC1z4zwzlyle0ba2mmpPwMgA1R7pi)
-    username: ENC(yAY6LgutunaoDP2577E/Qw==)
-    password: ENC(z6iqjKnuhdN90dzOyNKfS6cR3/t99V+L)
+    username: ENC(AvYxYgG0nKqrkYqq/pDITe9l5q6vPhfd)
+    password: ENC(4LgiftNp0CgSX1cGI+mrcI9Hf+JzXEm2)
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
   mail:
     host: mail.bbubbush.com
